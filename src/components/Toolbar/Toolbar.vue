@@ -8,12 +8,15 @@ import { Windows } from '@/components/Windows/Windows'
 import { AboutWindow } from '@/components/Windows/About/AboutWindow'
 import { appVersion } from '@/libs/app/AppEnv'
 import { useTranslate } from '@/libs/locales/Locales'
-import { appWindow } from '@tauri-apps/api/window'
+import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow'
 import { tauriBuild } from '@/libs/tauri/Tauri'
 import { DropdownItem, Toolbar, ToolbarItem } from './Toolbar'
 import { ActionManager } from '@/libs/actions/ActionManager'
 import { useIsMobile } from '@/libs/Mobile'
 import { onMounted, Ref, ref, watch } from 'vue'
+import { isTauri } from '@tauri-apps/api/core'
+
+const appWindow = isTauri() ? getCurrentWebviewWindow() : null
 
 const t = useTranslate()
 
@@ -108,9 +111,9 @@ function cleanupDropdownItems(items: DropdownItem[]): DropdownItem[] {
 			</div>
 
 			<div v-if="tauriBuild" class="flex gap-2 items-center">
-				<IconButton @click="appWindow.minimize()" icon="remove" class="text-base" />
-				<IconButton @click="appWindow.toggleMaximize()" icon="select_window" class="text-base" />
-				<IconButton @click="appWindow.close()" icon="close" class="text-base" />
+				<IconButton @click="appWindow?.minimize()" icon="remove" class="text-base" />
+				<IconButton @click="appWindow?.toggleMaximize()" icon="select_window" class="text-base" />
+				<IconButton @click="appWindow?.close()" icon="close" class="text-base" />
 			</div>
 		</div>
 	</div>
